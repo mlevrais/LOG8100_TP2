@@ -1,27 +1,33 @@
-FROM node:carbon
-LABEL MAINTAINER "Subash SN"
+# Damn Vulnerable NodeJS Application
+# https://github.com/appsecco/dvna
 
-# Set environment variables for non-interactive install
-ENV DEBIAN_FRONTEND=noninteractive
+FROM ubuntu:20.04
 
-# Remove references to stretch-updates and security.debian.org
-RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
-    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
-    && sed -i '/security.debian.org/s/^/#/' /etc/apt/sources.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends apt-utils \
-    && apt-get upgrade -y libc6 \
-    && apt-get clean \
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# Install nvm (Node Version Manager)
+ENV NVM_DIR /root/.nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+# Load nvm and install Node.js 8.x
+RUN bash -c "source $NVM_DIR/nvm.sh && nvm install 8 && nvm use 8 && nvm alias default 8"
+
+# Add Node.js and npm to the PATH
+ENV PATH="/root/.nvm/versions/node/v8.17.0/bin/:$PATH"
+
+# Verify Node.js and npm versions
+RUN node -v && npm -v && ldd --version
+
+# Set working directory
 WORKDIR /app
 
-COPY package*.json ./
+# Set up PATH for nvm and Node.js
+ENV PATH /root/.nvm/versions/node/v8.x/bin:$PATH
 
-RUN npm install && npm list
 
-COPY . .
 
-EXPOSE 9090
-
-CMD ["npm", "start"]
+CMD ["/bin/bash", "/app/entrypoint.sh"]

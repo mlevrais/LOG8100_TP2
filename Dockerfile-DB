@@ -1,8 +1,0 @@
-FROM postgres:latest
-
-# Set environment variables, put password in CICD eventually
-ENV POSTGRES_DB=dvna
-ENV POSTGRES_USER=dvna
-ENV POSTGRES_PASSWORD=passw0rd
-
-# COPY init.sql /docker-entrypoint-initdb.d/init.sql
