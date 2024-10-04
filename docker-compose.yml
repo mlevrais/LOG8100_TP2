@@ -1,26 +1,31 @@
-version: "2.1"
 services:
   app:
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - 9090:9090
+      - "3000:3000"
     volumes:
       - .:/app
-      - /app/node_modules
-    networks:
-      - dvna-network
+    depends_on:
+      - db
+    environment:
+      POSTGRES_USER: db            # Assigning user directly
+      POSTGRES_PASSWORD: db  # Assigning password directly
+      POSTGRES_DB: db             # Name of the database
+      POSTGRES_PORT: 5432          # Port on which PostgreSQL listens
 
-  postgres-db:
-    build:
-      context: ./
-      dockerfile: Dockerfile-DB
-    expose:
+  db:
+    image: postgres:13
+    ports:
       - "5432:5432"
-    networks:
-      - dvna-network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: db            # Assigning user directly
+      POSTGRES_PASSWORD: db  # Assigning password directly
+      POSTGRES_DB: db             # Name of the database
+      POSTGRES_PORT: 5432          # Port on which PostgreSQL listens
 
-networks:
-    dvna-network:
-        driver: bridge
+volumes:
+  pgdata:
