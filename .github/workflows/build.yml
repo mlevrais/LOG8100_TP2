@@ -1,0 +1,41 @@
+name: TP2 CI
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    
+jobs:
+  snyk:
+    name: Snyk
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '8.x'
+      - name: Node version
+        run: node -v
+      - name: Install
+        run: npm install
+      - name: Snyk
+        # You may pin to the exact commit or the version.
+        # uses: snyk/actions@b98d498629f1c368650224d6d212bf7dfa89e4bf
+        uses: snyk/actions@0.4.0
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
