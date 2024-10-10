@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install bcrypt
-        run: npm install bcrypt@latest
+        with:
+          node-version: '8.x'
       - name: Install
         run: npm install
       - name: Snyk
