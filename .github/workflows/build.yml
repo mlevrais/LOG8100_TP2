@@ -8,6 +8,19 @@ on:
     types: [opened, synchronize, reopened]
     
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '8.x'
+      - name: Node version
+        run: node -v
+      - name: Install
+        run: npm install
   snyk:
     name: Snyk
     runs-on: ubuntu-20.04
