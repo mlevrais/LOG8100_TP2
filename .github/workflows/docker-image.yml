@@ -38,6 +38,11 @@ jobs:
 
       - name: Build and push Docker image
         id: push
+        env:
+          POSTGRES_USER: "default"
+          POSTGRES_HOST: "ep-lively-shape-a4xbenvr-pooler.us-east-1.aws.neon.tech"
+          POSTGRES_PASSWORD: "lVUvWnG4mL6x"
+          POSTGRES_DATABASE: "verceldb"
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
