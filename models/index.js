@@ -9,9 +9,15 @@ var config = require("../config/db.js")
 if (process.env.DATABASE_URL) {
   var sequelize = new Sequelize("dburl");
 } else {
-  var sequelize = new Sequelize("db", "db", "db", {
-    host: "db",
-    dialect: "postgres"
+  var sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    }
   });
 }
 
