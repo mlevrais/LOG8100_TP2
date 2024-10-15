@@ -28,8 +28,4 @@ WORKDIR /app
 # Set up PATH for nvm and Node.js
 ENV PATH /root/.nvm/versions/node/v8.x/bin:$PATH
 
-# Copy entry point to app folder
-COPY entrypoint.sh /app/
-COPY wait-for-it.sh /app/
-
 CMD ["/bin/bash", "/app/entrypoint.sh"]
