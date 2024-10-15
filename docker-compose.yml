@@ -5,27 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-    depends_on:
-      - db
     environment:
-      POSTGRES_USER: db            # Assigning user directly
-      POSTGRES_PASSWORD: db  # Assigning password directly
-      POSTGRES_DB: db             # Name of the database
-      POSTGRES_PORT: 5432          # Port on which PostgreSQL listens
-
-  db:
-    image: postgres:13
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: db            # Assigning user directly
-      POSTGRES_PASSWORD: db  # Assigning password directly
-      POSTGRES_DB: db             # Name of the database
-      POSTGRES_PORT: 5432          # Port on which PostgreSQL listens
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB: ${POSTGRES_DB}
+      - POSTGRES_PORT: ${POSTGRES_PORT}
+      - POSTGRES_HOST: ${POSTGRES_HOST}
 
 volumes:
   pgdata:
