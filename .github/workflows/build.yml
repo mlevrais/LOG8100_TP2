@@ -1,4 +1,4 @@
-name: TP2 CI
+name: Security tests
 
 on:
   push:
